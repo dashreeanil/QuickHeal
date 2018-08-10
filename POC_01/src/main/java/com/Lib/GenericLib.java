@@ -18,7 +18,9 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-public class GenericLib {
+import com.Listners.CustomListener;
+
+public class GenericLib extends CustomListener{
 	public final static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	public static String sFile;
 	public static String senvTestDataFilePath;
@@ -27,6 +29,8 @@ public class GenericLib {
 	public static String sCacheDataFilePath ="./main/resources/Cache/ClientCache.xlsx";
 	public static String sServerDataFilePath = "./main/resources/Cache/ClientCache.xlsx";
 	public static String sServerCacheDataFilePath ="./main/resources/Cache/ClientCache.xlsx";
+	public static String sInjectorSheetName ="";
+	public static String sRowName ="";
 
 	/*
 	 * @author:Anil & Pawan
@@ -97,7 +101,7 @@ public class GenericLib {
 	 * 
 	 * Description:To read test data from excel sheet based on TestcaseID
 	 */
-	public static String[] toReadExcelData(String sFilepath, String sSheet, String urlID) {
+	public static String[] readExcelData(String sFilepath, String sSheet, String urlID) {
 		String sData[] = null;
 		try {
 			FileInputStream fis = new FileInputStream(sFilepath);
@@ -128,7 +132,7 @@ public class GenericLib {
 	 */
 
 	public static int getColumnIndex(String filepath, String sSheet, String colName) {
-		String[] firstRow = GenericLib.toReadExcelData(filepath, sSheet, "TEST_CASE_NO");
+		String[] firstRow = GenericLib.readExcelData(filepath, sSheet, "TEST_CASE_NO");
 		int index = 0;
 		for (int i = 0; i < firstRow.length; i++) {
 			if (firstRow[i].equalsIgnoreCase(colName)) {
@@ -146,7 +150,7 @@ public class GenericLib {
 	 */
 
 	public static int getProdColumnIndex(String filepath, String sSheet, String colName) {
-		String[] firstRow = GenericLib.toReadExcelData(filepath, sSheet, "CIRCLE");
+		String[] firstRow = GenericLib.readExcelData(filepath, sSheet, "CIRCLE");
 		int index = 0;
 		for (int i = 0; i < firstRow.length; i++) {
 			if (firstRow[i].equalsIgnoreCase(colName)) {
@@ -163,7 +167,7 @@ public class GenericLib {
 	 */
 
 	public static int getHeaderColumnIndex(String filepath, String sSheet, String colName) {
-		String[] firstRow = GenericLib.toReadExcelData(filepath, sSheet, "SI No");
+		String[] firstRow = GenericLib.readExcelData(filepath, sSheet, "SI No");
 		int index = 0;
 		for (int i = 0; i < firstRow.length; i++) {
 			if (firstRow[i].equalsIgnoreCase(colName)) {
@@ -194,6 +198,7 @@ public class GenericLib {
 					if (cell == null) {
 						cell = rowNum.createCell(columnNumber);
 						cell.setCellValue(value);
+						System.out.println("The Request is succusesfully added"+value);
 					} else {
 						cell.setCellValue(value);
 					}
@@ -232,4 +237,5 @@ public class GenericLib {
 	public static String getString(String str, String startStr, String endStr) {
 		return str.substring(str.indexOf(startStr) + startStr.length(), str.indexOf(endStr));
 	}
+	
 }
