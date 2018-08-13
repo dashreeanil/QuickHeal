@@ -104,7 +104,7 @@ public class GenericLib extends CustomListener{
 	 * 
 	 * Description:To read test data from excel sheet based on TestcaseID
 	 */
-	public static String[] readExcelData(String sFilepath, String sSheet, String urlID) {
+	public static String[] readExcelData(String sFilepath, String sSheet, String urlID,int colNum) {
 		String sData[] = null;
 		try {
 			FileInputStream fis = new FileInputStream(sFilepath);
@@ -112,7 +112,7 @@ public class GenericLib extends CustomListener{
 			Sheet sht = wb.getSheet(sSheet);
 			int iRowNum = sht.getLastRowNum();
 			for (int i = 0; i <= iRowNum; i++) {
-				if (sht.getRow(i).getCell(0).toString().equals(urlID)) {
+				if (sht.getRow(i).getCell(colNum).toString().equals(urlID)) {
 					int iCellNum = sht.getRow(i).getPhysicalNumberOfCells();
 					sData = new String[iCellNum];
 					for (int j = 0; j < iCellNum; j++) {
@@ -135,7 +135,7 @@ public class GenericLib extends CustomListener{
 	 */
 
 	public static int getColumnIndex(String filepath, String sSheet, String colName) {
-		String[] firstRow = GenericLib.readExcelData(filepath, sSheet, colName);
+		String[] firstRow = GenericLib.readExcelData(filepath, sSheet, "TEST_CASE_NO",0);
 		int index = 0;
 		for (int i = 0; i < firstRow.length; i++) {
 			if (firstRow[i].equalsIgnoreCase(colName)) {
@@ -144,6 +144,19 @@ public class GenericLib extends CustomListener{
 		}
 		return index;
 	}
+	
+	public static int getColumnIndexUrl(String filepath, String sSheet, String colName,int colNum) {
+		String[] firstRow = GenericLib.readExcelData(filepath, sSheet,colName,colNum);
+		int index = 0;
+		for (int i = 0; i < firstRow.length; i++) {
+			if (firstRow[i].equalsIgnoreCase(colName)) {
+				index = i;
+			}
+		}
+		return index;
+	}
+	
+	
 
 	/*
 	 * @author: Anil & Pawan 
@@ -153,7 +166,7 @@ public class GenericLib extends CustomListener{
 	 */
 
 	public static int getProdColumnIndex(String filepath, String sSheet, String colName) {
-		String[] firstRow = GenericLib.readExcelData(filepath, sSheet, "CATAGORY");
+		String[] firstRow = GenericLib.readExcelData(filepath, sSheet, "CATAGORY",2);
 		int index = 0;
 		for (int i = 0; i < firstRow.length; i++) {
 			if (firstRow[i].equalsIgnoreCase(colName)) {
@@ -170,7 +183,7 @@ public class GenericLib extends CustomListener{
 	 */
 
 	public static int getHeaderColumnIndex(String filepath, String sSheet, String colName) {
-		String[] firstRow = GenericLib.readExcelData(filepath, sSheet, "SI No");
+		String[] firstRow = GenericLib.readExcelData(filepath, sSheet, "SI No",0);
 		int index = 0;
 		for (int i = 0; i < firstRow.length; i++) {
 			if (firstRow[i].equalsIgnoreCase(colName)) {
@@ -241,28 +254,7 @@ public class GenericLib extends CustomListener{
 		return str.substring(str.indexOf(startStr) + startStr.length(), str.indexOf(endStr));
 	}
 	
-	public static void validationClientCache(String url)
-	{
-		String sData[] = null;
-		try {
-			FileInputStream fis = new FileInputStream(sInjectorDataFilePath);
-			Workbook wb = (Workbook) WorkbookFactory.create(fis);
-			Sheet sht = wb.getSheet(sInjectorSheetName);
-			int iRowNum = sht.getLastRowNum();
-			for (int i = 0; i <= iRowNum; i++) {
-				if (sht.getRow(i).getCell(0).toString().equals(url)) {
-					int iCellNum = sht.getRow(i).getPhysicalNumberOfCells();
-					sData = new String[iCellNum];
-					for (int j = 0; j < iCellNum; j++) {
-						sData[j] = sht.getRow(i).getCell(j).getStringCellValue();
-					}
-					break;
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+
 		
 	/* 
 	 * description : read a particular column data  
@@ -310,32 +302,75 @@ public class GenericLib extends CustomListener{
 				}
 			}
 			if(count%2==0){
-				GenericLib.setLastCellData(sCacheDataFilePath, "Cache","Url", lst.get(i));
+				GenericLib.setLastCellData(sCacheDataFilePath, "Cache","Url", lst.get(i),1);
 			}
 			count=0;
 		}
 		}
 	
+	
+	public static void updateClientCache(String url) throws Exception
+	{
+		try {
+			FileInputStream fis = new FileInputStream(sCacheDataFilePath);
+			Workbook wb = (Workbook) WorkbookFactory.create(fis);
+			Sheet sht = wb.getSheet("Sheet1");
+			// logger.info("----------Sheet " + sSheet);
+			int lastRowNum = sht.getLastRowNum();
+			Row rowNum = sht.getRow(lastRowNum);
+			Cell cell = rowNum.getCell(1);
+			if (cell == null) {
+				cell = rowNum.createCell(1);
+				cell.setCellValue(url);
+				System.out.println("The Request is succusesfully added"+url);
+			} else {
+					cell.setCellValue(url);
+       				}
+			FileOutputStream fileOut = new FileOutputStream(sCacheDataFilePath);
+			wb.write(fileOut);
+			fileOut.flush();
+			fileOut.close();
+		} catch (Exception e) {
+			throw (e);
+		}
+	}
+	
+	public static void validationClientCache(String url,int colNum) throws Exception
+	{
+		String sData[] = readExcelData(sCacheDataFilePath, "Sheet1",url,colNum);
+		int urlInd = getColumnIndexUrl(sCacheDataFilePath, "Sheet1", "Url",colNum);
+		String expUrl = sData[urlInd];
+		System.out.println(expUrl);
+		if(expUrl.equalsIgnoreCase(url))
+		{
+			System.out.println("Url updated");
+		}
+		System.out.println("Url is not updated");
+	}
+	
+
 	/*
 	 * 
 	 * Description:Method is used to set data in last row  of excel sheet
 	 */
 
-	public static void setLastCellData(String filePath, String sSheet,String columnName, String value)
+	public static void setLastCellData(String filePath, String sSheet,String columnName, String value,int colNum)
 			throws Exception {
-		int columnNumber = getColumnIndex(filePath, sSheet, columnName);
+		int columnNumber = getColumnIndexUrl(filePath, sSheet, columnName,colNum);
 		try {
 			FileInputStream fis = new FileInputStream(filePath);
 			Workbook wb = (Workbook) WorkbookFactory.create(fis);
 			Sheet sht = wb.getSheet(sSheet);
 			// logger.info("----------Sheet " + sSheet);
-			int lastRowNum = sht.getLastRowNum();
+			int lastRowNum = sht.getLastRowNum()+1;
+			System.out.println(lastRowNum);
+			Row row = sht.createRow(lastRowNum);
 			Row rowNum = sht.getRow(lastRowNum);
 			Cell cell = rowNum.getCell(columnNumber);
 			if (cell == null) {
 				cell = rowNum.createCell(columnNumber);
 				cell.setCellValue(value);
-				System.out.println("The Request is succusesfully added"+value);
+				System.out.println("The Request is succusesfully added "+value);
 			} else {
 					cell.setCellValue(value);
        				}
@@ -346,9 +381,6 @@ public class GenericLib extends CustomListener{
 		} catch (Exception e) {
 			throw (e);
 		}
-	}
-	@Test
-	public static void refresh1() throws Exception{
-         refresh();
-		}
 }
+}
+

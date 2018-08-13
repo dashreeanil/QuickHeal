@@ -2,20 +2,20 @@
 <testng-results skipped="0" failed="1" total="1" passed="0">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="981" started-at="2018-08-13T11:21:30Z" finished-at="2018-08-13T11:21:31Z">
+  <suite name="Default suite" duration-ms="6227" started-at="2018-08-13T16:58:05Z" finished-at="2018-08-13T16:58:11Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="981" started-at="2018-08-13T11:21:30Z" finished-at="2018-08-13T11:21:31Z">
-      <class name="com.Lib.GenericLib">
-        <test-method status="FAIL" signature="refresh1()" name="refresh1" duration-ms="963" started-at="2018-08-13T11:21:30Z" finished-at="2018-08-13T11:21:31Z">
-          <exception class="java.lang.NullPointerException">
+    <test name="Default test" duration-ms="6227" started-at="2018-08-13T16:58:05Z" finished-at="2018-08-13T16:58:11Z">
+      <class name="com.tests.client.TestAutomation_01">
+        <test-method status="FAIL" signature="checkForDomain()" name="checkForDomain" duration-ms="6211" started-at="2018-08-13T16:58:05Z" description="To check if Domain/URL is present" finished-at="2018-08-13T16:58:11Z">
+          <exception class="java.lang.ArrayIndexOutOfBoundsException">
+            <message>
+              <![CDATA[1]]>
+            </message>
             <full-stacktrace>
-              <![CDATA[java.lang.NullPointerException
-	at java.util.Objects.requireNonNull(Objects.java:203)
-	at java.util.Arrays$ArrayList.<init>(Arrays.java:3813)
-	at java.util.Arrays.asList(Arrays.java:3800)
-	at com.Lib.GenericLib.refresh(GenericLib.java:300)
-	at com.Lib.GenericLib.refresh1(GenericLib.java:352)
+              <![CDATA[java.lang.ArrayIndexOutOfBoundsException: 1
+	at com.Lib.GenericLib.validationClientCache(GenericLib.java:342)
+	at com.tests.client.TestAutomation_01.checkForDomain(TestAutomation_01.java:20)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
