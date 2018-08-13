@@ -8,6 +8,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 import java.util.logging.Logger;
@@ -17,6 +19,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.testng.annotations.Test;
 
 import com.Listners.CustomListener;
 
@@ -25,12 +28,12 @@ public class GenericLib extends CustomListener{
 	public static String sFile;
 	public static String senvTestDataFilePath;
 //	static public String sDirPath = System.getProperty("user.dir");
-	public static String sInjectorDataFilePath = "./main/resources/Cache/ClientCache.xlsx";
-	public static String sCacheDataFilePath ="./main/resources/Cache/ClientCache.xlsx";
-	public static String sServerDataFilePath = "./main/resources/Cache/ClientCache.xlsx";
-	public static String sServerCacheDataFilePath ="./main/resources/Cache/ClientCache.xlsx";
-	public static String sInjectorSheetName ="";
-	public static String sRowName ="";
+	public static String sInjectorDataFilePath = "C:\\Users\\dashree\\git\\QuickHeal\\POC_01\\src\\main\\resources\\Injector\\Injector.xlsx";
+	public static String sCacheDataFilePath ="C:\\Users\\dashree\\git\\QuickHeal\\POC_01\\src\\main\\resources\\ClientCache\\ClientCache.xlsx";
+	public static String sServerDataFilePath = "C:\\Users\\dashree\\git\\QuickHeal\\POC_01\\src\\main\\resources\\Server\\Server.xlsx";
+	public static String sServerCacheDataFilePath ="C:\\Users\\dashree\\git\\QuickHeal\\POC_01\\src\\main\\resources\\ServerCache\\ServerCache.xlsx";
+	public static String sInjectorSheetName ="InjectorClient";
+	public static String sInjectorSheetColumnName ="URL";
 
 	/*
 	 * @author:Anil & Pawan
@@ -132,7 +135,7 @@ public class GenericLib extends CustomListener{
 	 */
 
 	public static int getColumnIndex(String filepath, String sSheet, String colName) {
-		String[] firstRow = GenericLib.readExcelData(filepath, sSheet, "TEST_CASE_NO");
+		String[] firstRow = GenericLib.readExcelData(filepath, sSheet, colName);
 		int index = 0;
 		for (int i = 0; i < firstRow.length; i++) {
 			if (firstRow[i].equalsIgnoreCase(colName)) {
@@ -150,7 +153,7 @@ public class GenericLib extends CustomListener{
 	 */
 
 	public static int getProdColumnIndex(String filepath, String sSheet, String colName) {
-		String[] firstRow = GenericLib.readExcelData(filepath, sSheet, "CIRCLE");
+		String[] firstRow = GenericLib.readExcelData(filepath, sSheet, "CATAGORY");
 		int index = 0;
 		for (int i = 0; i < firstRow.length; i++) {
 			if (firstRow[i].equalsIgnoreCase(colName)) {
@@ -238,4 +241,114 @@ public class GenericLib extends CustomListener{
 		return str.substring(str.indexOf(startStr) + startStr.length(), str.indexOf(endStr));
 	}
 	
+	public static void validationClientCache(String url)
+	{
+		String sData[] = null;
+		try {
+			FileInputStream fis = new FileInputStream(sInjectorDataFilePath);
+			Workbook wb = (Workbook) WorkbookFactory.create(fis);
+			Sheet sht = wb.getSheet(sInjectorSheetName);
+			int iRowNum = sht.getLastRowNum();
+			for (int i = 0; i <= iRowNum; i++) {
+				if (sht.getRow(i).getCell(0).toString().equals(url)) {
+					int iCellNum = sht.getRow(i).getPhysicalNumberOfCells();
+					sData = new String[iCellNum];
+					for (int j = 0; j < iCellNum; j++) {
+						sData[j] = sht.getRow(i).getCell(j).getStringCellValue();
+					}
+					break;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+		
+	/* 
+	 * description : read a particular column data  
+	 * 
+	 * 
+	 * 
+	 */
+	public static String[] readExcelDataOfColumn(String sFilepath, String sSheet, String colName) {
+		String sData[] = null;
+		try {
+			FileInputStream fis = new FileInputStream(sFilepath);
+			Workbook wb = WorkbookFactory.create(fis);
+			Sheet sht = wb.getSheet(sSheet);
+			int iRowNum = sht.getLastRowNum();
+			for (int i = 0; i <= iRowNum-1; i++) {
+					int iCellNum = getColumnIndex(sFilepath, sSheet, colName);
+					sData = new String[iRowNum];
+					sData[i] = sht.getRow(i+1).getCell(iCellNum).getStringCellValue();
+				}
+			}
+		 catch (Exception e) {
+			e.printStackTrace();
+		}
+		return sData;
+	}
+	
+	/*
+	 * 
+	 * 
+	 * 
+	 */
+	
+	public static void refresh() throws Exception{
+		 System.out.println(GenericLib.readExcelDataOfColumn(sServerDataFilePath, "Social", "Url"));
+		List<String> lst =Arrays.asList(GenericLib.readExcelDataOfColumn(sServerDataFilePath, "Social", "Url"));
+		List<String> lst1 =Arrays.asList(GenericLib.readExcelDataOfColumn(sCacheDataFilePath, "Cache", "Url")); 
+		int count =0;
+		for(int i=0;i<lst1.size();i++){	
+			for(int j=0;j<lst.size();j++){
+				if(!(lst1.get(i).equals(lst.get(j)))){
+					count=count+2;
+				}  
+				else{
+					count=count+1;	
+				}
+			}
+			if(count%2==0){
+				GenericLib.setLastCellData(sCacheDataFilePath, "Cache","Url", lst.get(i));
+			}
+			count=0;
+		}
+		}
+	
+	/*
+	 * 
+	 * Description:Method is used to set data in last row  of excel sheet
+	 */
+
+	public static void setLastCellData(String filePath, String sSheet,String columnName, String value)
+			throws Exception {
+		int columnNumber = getColumnIndex(filePath, sSheet, columnName);
+		try {
+			FileInputStream fis = new FileInputStream(filePath);
+			Workbook wb = (Workbook) WorkbookFactory.create(fis);
+			Sheet sht = wb.getSheet(sSheet);
+			// logger.info("----------Sheet " + sSheet);
+			int lastRowNum = sht.getLastRowNum();
+			Row rowNum = sht.getRow(lastRowNum);
+			Cell cell = rowNum.getCell(columnNumber);
+			if (cell == null) {
+				cell = rowNum.createCell(columnNumber);
+				cell.setCellValue(value);
+				System.out.println("The Request is succusesfully added"+value);
+			} else {
+					cell.setCellValue(value);
+       				}
+			FileOutputStream fileOut = new FileOutputStream(filePath);
+			wb.write(fileOut);
+			fileOut.flush();
+			fileOut.close();
+		} catch (Exception e) {
+			throw (e);
+		}
+	}
+	@Test
+	public static void refresh1() throws Exception{
+         refresh();
+		}
 }
