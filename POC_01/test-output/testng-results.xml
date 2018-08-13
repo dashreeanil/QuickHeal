@@ -2,19 +2,17 @@
 <testng-results skipped="0" failed="1" total="1" passed="0">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="6227" started-at="2018-08-13T16:58:05Z" finished-at="2018-08-13T16:58:11Z">
+  <suite name="Default suite" duration-ms="1104" started-at="2018-08-13T18:46:04Z" finished-at="2018-08-13T18:46:05Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="6227" started-at="2018-08-13T16:58:05Z" finished-at="2018-08-13T16:58:11Z">
+    <test name="Default test" duration-ms="1104" started-at="2018-08-13T18:46:04Z" finished-at="2018-08-13T18:46:05Z">
       <class name="com.tests.client.TestAutomation_01">
-        <test-method status="FAIL" signature="checkForDomain()" name="checkForDomain" duration-ms="6211" started-at="2018-08-13T16:58:05Z" description="To check if Domain/URL is present" finished-at="2018-08-13T16:58:11Z">
-          <exception class="java.lang.ArrayIndexOutOfBoundsException">
-            <message>
-              <![CDATA[1]]>
-            </message>
+        <test-method status="FAIL" signature="checkForDomain()" name="checkForDomain" duration-ms="1085" started-at="2018-08-13T18:46:04Z" description="To check if Domain/URL is present" finished-at="2018-08-13T18:46:05Z">
+          <exception class="java.lang.NullPointerException">
             <full-stacktrace>
-              <![CDATA[java.lang.ArrayIndexOutOfBoundsException: 1
-	at com.Lib.GenericLib.validationClientCache(GenericLib.java:342)
+              <![CDATA[java.lang.NullPointerException
+	at com.Lib.GenericLib.getColumnIndex(GenericLib.java:154)
+	at com.Lib.GenericLib.setLastCellDataCatagory(GenericLib.java:396)
 	at com.tests.client.TestAutomation_01.checkForDomain(TestAutomation_01.java:20)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)

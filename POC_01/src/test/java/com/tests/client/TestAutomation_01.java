@@ -13,11 +13,14 @@ public class TestAutomation_01 extends CustomListener {
 	public void checkForDomain() throws Exception
 	{
 		String sDataClient[] = GenericLib.readExcelData(GenericLib.sInjectorDataFilePath,GenericLib.sInjectorSheetName,"TC_01",0);
+		
 		int url = GenericLib.getColumnIndex(GenericLib.sInjectorDataFilePath,GenericLib.sInjectorSheetName,"URL");
 		System.out.println(sDataClient[url]);
-		GenericLib.setLastCellData(GenericLib.sCacheDataFilePath,"Sheet1","Url",sDataClient[url],1);
+		GenericLib.setLastCellDataUrl(GenericLib.sCacheDataFilePath,"Sheet1","Url",sDataClient[url],0);
+		GenericLib.setLastCellDataCatagory(GenericLib.sCacheDataFilePath,"Sheet1","Category","12",1);
+		GenericLib.setLastCellDataDomain(GenericLib.sCacheDataFilePath,"Sheet1","DomainFlag","A",2);
 		Thread.sleep(5000);
-		GenericLib.validationClientCache(sDataClient[url],1);
+		GenericLib.validationClientCache(sDataClient[url],0);
 	}
 
 }

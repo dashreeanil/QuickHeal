@@ -1,5 +1,7 @@
 package com.Lib;
 
+import static org.testng.Assert.fail;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,7 +10,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -19,6 +23,11 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.Listners.CustomListener;
@@ -145,9 +154,9 @@ public class GenericLib extends CustomListener{
 		return index;
 	}
 	
-	public static int getColumnIndexUrl(String filepath, String sSheet, String colName,int colNum) {
+	public static int getColumnIndex(String filepath, String sSheet, String colName,int colNum) {
 		String[] firstRow = GenericLib.readExcelData(filepath, sSheet,colName,colNum);
-		int index = 0;
+		int index = -1;
 		for (int i = 0; i < firstRow.length; i++) {
 			if (firstRow[i].equalsIgnoreCase(colName)) {
 				index = i;
@@ -302,7 +311,7 @@ public class GenericLib extends CustomListener{
 				}
 			}
 			if(count%2==0){
-				GenericLib.setLastCellData(sCacheDataFilePath, "Cache","Url", lst.get(i),1);
+				GenericLib.setLastCellDataUrl(sCacheDataFilePath, "Cache","Url", lst.get(i),1);
 			}
 			count=0;
 		}
@@ -338,14 +347,18 @@ public class GenericLib extends CustomListener{
 	public static void validationClientCache(String url,int colNum) throws Exception
 	{
 		String sData[] = readExcelData(sCacheDataFilePath, "Sheet1",url,colNum);
-		int urlInd = getColumnIndexUrl(sCacheDataFilePath, "Sheet1", "Url",colNum);
+		int urlInd = getColumnIndex(sCacheDataFilePath, "Sheet1", "Url",colNum);
 		String expUrl = sData[urlInd];
 		System.out.println(expUrl);
 		if(expUrl.equalsIgnoreCase(url))
 		{
 			System.out.println("Url updated");
 		}
-		System.out.println("Url is not updated");
+		else {
+			System.out.println("Url is not updated");
+			Assert.fail();
+		}
+		
 	}
 	
 
@@ -354,9 +367,9 @@ public class GenericLib extends CustomListener{
 	 * Description:Method is used to set data in last row  of excel sheet
 	 */
 
-	public static void setLastCellData(String filePath, String sSheet,String columnName, String value,int colNum)
+	public static void setLastCellDataUrl(String filePath, String sSheet,String columnName, String value,int colNum)
 			throws Exception {
-		int columnNumber = getColumnIndexUrl(filePath, sSheet, columnName,colNum);
+		int columnNumber = getColumnIndex(filePath, sSheet, columnName,colNum);
 		try {
 			FileInputStream fis = new FileInputStream(filePath);
 			Workbook wb = (Workbook) WorkbookFactory.create(fis);
@@ -381,6 +394,142 @@ public class GenericLib extends CustomListener{
 		} catch (Exception e) {
 			throw (e);
 		}
+	}
+	
+		
+		public static void setLastCellDataCatagory(String filePath, String sSheet,String columnName, String value,int colNum)
+				throws Exception {
+			int columnNumber = getColumnIndex(filePath, sSheet, columnName,colNum);
+			try {
+				FileInputStream fis = new FileInputStream(filePath);
+				Workbook wb = (Workbook) WorkbookFactory.create(fis);
+				Sheet sht = wb.getSheet(sSheet);
+				// logger.info("----------Sheet " + sSheet);
+				int lastRowNum = sht.getLastRowNum()-colNum;
+				System.out.println(lastRowNum);
+				
+				Row rowNum = sht.getRow(lastRowNum);
+				Cell cell = rowNum.getCell(columnNumber);
+				if (cell == null) {
+					cell = rowNum.createCell(columnNumber);
+					cell.setCellValue(value);
+					System.out.println("The Request is succusesfully added "+value);
+				} else {
+						cell.setCellValue(value);
+	       				}
+				FileOutputStream fileOut = new FileOutputStream(filePath);
+				wb.write(fileOut);
+				fileOut.flush();
+				fileOut.close();
+			} catch (Exception e) {
+				throw (e);
+			}
 }
+		public static void setLastCellDataDomain(String filePath, String sSheet,String columnName, String value,int colNum)
+				throws Exception {
+			int columnNumber = getColumnIndex(filePath, sSheet, columnName,colNum);
+			try {
+				FileInputStream fis = new FileInputStream(filePath);
+				Workbook wb = (Workbook) WorkbookFactory.create(fis);
+				Sheet sht = wb.getSheet(sSheet);
+				// logger.info("----------Sheet " + sSheet);
+				int lastRowNum = sht.getLastRowNum()-colNum;
+				System.out.println(lastRowNum);
+				
+				Row rowNum = sht.getRow(lastRowNum);
+				Cell cell = rowNum.getCell(columnNumber);
+				if (cell == null) {
+					cell = rowNum.createCell(columnNumber);
+					cell.setCellValue(value);
+					System.out.println("The Request is succusesfully added "+value);
+				} else {
+						cell.setCellValue(value);
+	       				}
+				FileOutputStream fileOut = new FileOutputStream(filePath);
+				wb.write(fileOut);
+				fileOut.flush();
+				fileOut.close();
+			} catch (Exception e) {
+				throw (e);
+			}
 }
+		
+		/*extracting content of excle by column index
+		 * 
+		 * 
+		 * */
+		
+	public 	ArrayList<String> extractExcelContentByColumnIndex(int columnIndex){
+	        ArrayList<String> columndata = null;
+	        try {
+	            File f = new File("sample.xlsx");
+	            FileInputStream ios = new FileInputStream(f);
+	            XSSFWorkbook workbook = new XSSFWorkbook(ios);
+	            XSSFSheet sheet = workbook.getSheetAt(0);
+	            Iterator<Row> rowIterator = sheet.iterator();
+	            columndata = new ArrayList<String>();
+
+	            while (rowIterator.hasNext()) {
+	                Row row = rowIterator.next();
+	                Iterator<Cell> cellIterator = row.cellIterator();
+	                while (cellIterator.hasNext()) {
+	                    Cell cell = cellIterator.next();
+
+	                    if(row.getRowNum() > 0){ //To filter column headings
+	                        if(cell.getColumnIndex() == columnIndex){// To match column index
+	                            switch (cell.getCellType()) {
+	                            case Cell.CELL_TYPE_NUMERIC:
+	                                columndata.add(cell.getNumericCellValue()+"");
+	                                break;
+	                            case Cell.CELL_TYPE_STRING:
+	                                columndata.add(cell.getStringCellValue());
+	                                break;
+	                            }
+	                        }
+	                    }
+	                }
+	            }
+	            ios.close();
+	            System.out.println(columndata);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	        return columndata;
+	    }
+	
+	public boolean setCellData(String path,String sheetName, int colNumber, int rowNum, String value)
+    {
+		FileInputStream fis = null;
+	    FileOutputStream fos = null;
+	    XSSFWorkbook workbook = null;
+	    XSSFSheet sheet = null;
+	    XSSFRow row = null;
+	    XSSFCell cell = null;
+	    String xlFilePath;
+        try
+        {
+            sheet = workbook.getSheet(sheetName);
+            row = sheet.getRow(rowNum);
+            if(row==null)
+                row = sheet.createRow(rowNum);
+ 
+            cell = row.getCell(colNumber);
+            if(cell == null)
+                cell = row.createCell(colNumber);
+ 
+            cell.setCellValue(value);
+ 
+            fos = new FileOutputStream(path);
+            workbook.write(fos);
+            fos.close();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            return  false;
+        }
+        return true;
+    }
+}
+
 

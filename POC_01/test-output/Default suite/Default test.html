@@ -57,9 +57,9 @@ function toggleAllBoxes() {
 <tr>
 <td>Tests passed/Failed/Skipped:</td><td>0/1/0</td>
 </tr><tr>
-<td>Started on:</td><td>Mon Aug 13 16:58:05 IST 2018</td>
+<td>Started on:</td><td>Mon Aug 13 18:46:04 IST 2018</td>
 </tr>
-<tr><td>Total time:</td><td>6 seconds (6227 ms)</td>
+<tr><td>Total time:</td><td>1 seconds (1104 ms)</td>
 </tr><tr>
 <td>Included groups:</td><td></td>
 </tr><tr>
@@ -76,8 +76,9 @@ function toggleAllBoxes() {
 </tr>
 <tr>
 <td title='com.tests.client.TestAutomation_01.checkForDomain()'><b>checkForDomain</b><br>Test class: com.tests.client.TestAutomation_01<br>Test method: To check if Domain/URL is present</td>
-<td><div><pre>java.lang.ArrayIndexOutOfBoundsException: 1
-	at com.Lib.GenericLib.validationClientCache(GenericLib.java:342)
+<td><div><pre>java.lang.NullPointerException
+	at com.Lib.GenericLib.getColumnIndex(GenericLib.java:154)
+	at com.Lib.GenericLib.setLastCellDataCatagory(GenericLib.java:396)
 	at com.tests.client.TestAutomation_01.checkForDomain(TestAutomation_01.java:20)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
@@ -104,9 +105,10 @@ function toggleAllBoxes() {
 	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:114)
 	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
 	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
-</pre></div><a href='#' onClick='toggleBox("stack-trace195984832", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
-<div class='stack-trace' id='stack-trace195984832'><pre>java.lang.ArrayIndexOutOfBoundsException: 1
-	at com.Lib.GenericLib.validationClientCache(GenericLib.java:342)
+</pre></div><a href='#' onClick='toggleBox("stack-trace1138410383", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace1138410383'><pre>java.lang.NullPointerException
+	at com.Lib.GenericLib.getColumnIndex(GenericLib.java:154)
+	at com.Lib.GenericLib.setLastCellDataCatagory(GenericLib.java:396)
 	at com.tests.client.TestAutomation_01.checkForDomain(TestAutomation_01.java:20)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
@@ -134,7 +136,7 @@ function toggleAllBoxes() {
 	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
 	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
 </pre></div></td>
-<td>6</td>
+<td>1</td>
 <td>com.tests.client.TestAutomation_01@3fee9989</td></tr>
 </table><p>
 </body>
