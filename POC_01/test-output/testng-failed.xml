@@ -3,9 +3,10 @@
 <suite name="Failed suite [Default suite]">
   <test name="Default test(failed)" preserve-order="false">
     <classes>
-      <class name="com.tests.client.TestAutomation_01">
+      <class name="com.tests.server.TestAutomation_01">
         <methods>
-          <include name="checkForDomain"/>
+          <include name="updateCategoryRecived"/>
+          <include name="updateServerCategory"/>
         </methods>
       </class>
     </classes>

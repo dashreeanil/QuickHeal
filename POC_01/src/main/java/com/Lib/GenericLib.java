@@ -41,8 +41,9 @@ public class GenericLib extends CustomListener{
 	public static String sCacheDataFilePath ="C:\\Users\\dashree\\git\\QuickHeal\\POC_01\\src\\main\\resources\\ClientCache\\ClientCache.xlsx";
 	public static String sServerDataFilePath = "C:\\Users\\dashree\\git\\QuickHeal\\POC_01\\src\\main\\resources\\Server\\Server.xlsx";
 	public static String sServerCacheDataFilePath ="C:\\Users\\dashree\\git\\QuickHeal\\POC_01\\src\\main\\resources\\ServerCache\\ServerCache.xlsx";
-	public static String sInjectorSheetName ="InjectorClient";
+	public static String sInjectorClientSheetName ="InjectorClient";
 	public static String sInjectorSheetColumnName ="URL";
+	public static String sInjectorServerSheetName ="InjectorServer";
 
 	/*
 	 * @author:Anil & Pawan
@@ -153,6 +154,27 @@ public class GenericLib extends CustomListener{
 		}
 		return index;
 	}
+	public static int getColumnIndexUrlId(String filepath, String sSheet, String colName) {
+		String[] firstRow = GenericLib.readExcelData(filepath, sSheet, "UrlID",0);
+		int index = 0;
+		for (int i = 0; i < firstRow.length; i++) {
+			if (firstRow[i].equalsIgnoreCase(colName)) {
+				index = i;
+			}
+		}
+		return index;
+	}
+
+	public static int getColumnIndexCatogary(String filepath, String sSheet, String colName) {
+		String[] firstRow = GenericLib.readExcelData(filepath, sSheet, colName,1);
+		int index = 0;
+		for (int i = 0; i < firstRow.length; i++) {
+			if (firstRow[i].equalsIgnoreCase(colName)) {
+				index = i;
+			}
+		}
+		return index;
+	}
 	
 	public static int getColumnIndex(String filepath, String sSheet, String colName,int colNum) {
 		String[] firstRow = GenericLib.readExcelData(filepath, sSheet,colName,colNum);
@@ -175,7 +197,7 @@ public class GenericLib extends CustomListener{
 	 */
 
 	public static int getProdColumnIndex(String filepath, String sSheet, String colName) {
-		String[] firstRow = GenericLib.readExcelData(filepath, sSheet, "CATAGORY",2);
+		String[] firstRow = GenericLib.readExcelData(filepath, sSheet, "Category",1);
 		int index = 0;
 		for (int i = 0; i < firstRow.length; i++) {
 			if (firstRow[i].equalsIgnoreCase(colName)) {
@@ -238,6 +260,71 @@ public class GenericLib extends CustomListener{
 			throw (e);
 		}
 	}
+	
+	public static void setCellDataUrlId(String filePath, String sSheet, String sTestCaseID, String columnName, String value)
+			throws Exception {
+		int columnNumber = getColumnIndexUrlId(filePath, sSheet, columnName);
+		try {
+			FileInputStream fis = new FileInputStream(filePath);
+			Workbook wb = (Workbook) WorkbookFactory.create(fis);
+			Sheet sht = wb.getSheet(sSheet);
+			// logger.info("----------Sheet " + sSheet);
+			int lastRowNum = sht.getLastRowNum();
+			for (int i = 0; i <= lastRowNum; i++) {
+				if (sht.getRow(i).getCell(0).toString().equals(sTestCaseID)) {
+					Row rowNum = sht.getRow(i);
+					Cell cell = rowNum.getCell(columnNumber);
+					if (cell == null) {
+						cell = rowNum.createCell(columnNumber);
+						cell.setCellValue(value);
+						System.out.println("The Request is succusesfully added"+value);
+					} else {
+						cell.setCellValue(value);
+					}
+					break;
+				}
+			}
+			FileOutputStream fileOut = new FileOutputStream(filePath);
+			wb.write(fileOut);
+			fileOut.flush();
+			fileOut.close();
+		} catch (Exception e) {
+			throw (e);
+		}
+	}
+	
+	public static void setCellDataCatogary(String filePath, String sSheet, String sTestCaseID, String columnName, String value)
+			throws Exception {
+		int columnNumber = getColumnIndexCatogary(filePath, sSheet, columnName);
+		try {
+			FileInputStream fis = new FileInputStream(filePath);
+			Workbook wb = (Workbook) WorkbookFactory.create(fis);
+			Sheet sht = wb.getSheet(sSheet);
+			// logger.info("----------Sheet " + sSheet);
+			int lastRowNum = sht.getLastRowNum();
+			for (int i = 0; i <= lastRowNum; i++) {
+				if (sht.getRow(i).getCell(0).toString().equals(sTestCaseID)) {
+					Row rowNum = sht.getRow(i);
+					Cell cell = rowNum.getCell(columnNumber);
+					if (cell == null) {
+						cell = rowNum.createCell(columnNumber);
+						cell.setCellValue(value);
+						System.out.println("The Request is succusesfully added"+value);
+					} else {
+						cell.setCellValue(value);
+					}
+					break;
+				}
+			}
+			FileOutputStream fileOut = new FileOutputStream(filePath);
+			wb.write(fileOut);
+			fileOut.flush();
+			fileOut.close();
+		} catch (Exception e) {
+			throw (e);
+		}
+	}
+	
 
 	/*
 	 * @author: 
@@ -290,59 +377,7 @@ public class GenericLib extends CustomListener{
 		return sData;
 	}
 	
-	/*
-	 * 
-	 * 
-	 * 
-	 */
-	
-	public static void refresh() throws Exception{
-		 System.out.println(GenericLib.readExcelDataOfColumn(sServerDataFilePath, "Social", "Url"));
-		List<String> lst =Arrays.asList(GenericLib.readExcelDataOfColumn(sServerDataFilePath, "Social", "Url"));
-		List<String> lst1 =Arrays.asList(GenericLib.readExcelDataOfColumn(sCacheDataFilePath, "Cache", "Url")); 
-		int count =0;
-		for(int i=0;i<lst1.size();i++){	
-			for(int j=0;j<lst.size();j++){
-				if(!(lst1.get(i).equals(lst.get(j)))){
-					count=count+2;
-				}  
-				else{
-					count=count+1;	
-				}
-			}
-			if(count%2==0){
-				GenericLib.setLastCellDataUrl(sCacheDataFilePath, "Cache","Url", lst.get(i),1);
-			}
-			count=0;
-		}
-		}
-	
-	
-	public static void updateClientCache(String url) throws Exception
-	{
-		try {
-			FileInputStream fis = new FileInputStream(sCacheDataFilePath);
-			Workbook wb = (Workbook) WorkbookFactory.create(fis);
-			Sheet sht = wb.getSheet("Sheet1");
-			// logger.info("----------Sheet " + sSheet);
-			int lastRowNum = sht.getLastRowNum();
-			Row rowNum = sht.getRow(lastRowNum);
-			Cell cell = rowNum.getCell(1);
-			if (cell == null) {
-				cell = rowNum.createCell(1);
-				cell.setCellValue(url);
-				System.out.println("The Request is succusesfully added"+url);
-			} else {
-					cell.setCellValue(url);
-       				}
-			FileOutputStream fileOut = new FileOutputStream(sCacheDataFilePath);
-			wb.write(fileOut);
-			fileOut.flush();
-			fileOut.close();
-		} catch (Exception e) {
-			throw (e);
-		}
-	}
+
 	
 	public static void validationClientCache(String url,int colNum) throws Exception
 	{
@@ -369,7 +404,7 @@ public class GenericLib extends CustomListener{
 
 	public static void setLastCellDataUrl(String filePath, String sSheet,String columnName, String value,int colNum)
 			throws Exception {
-		int columnNumber = getColumnIndex(filePath, sSheet, columnName,colNum);
+		int columnNumber = colNum;
 		try {
 			FileInputStream fis = new FileInputStream(filePath);
 			Workbook wb = (Workbook) WorkbookFactory.create(fis);
@@ -399,13 +434,41 @@ public class GenericLib extends CustomListener{
 		
 		public static void setLastCellDataCatagory(String filePath, String sSheet,String columnName, String value,int colNum)
 				throws Exception {
-			int columnNumber = getColumnIndex(filePath, sSheet, columnName,colNum);
+			int columnNumber = colNum;
 			try {
 				FileInputStream fis = new FileInputStream(filePath);
 				Workbook wb = (Workbook) WorkbookFactory.create(fis);
 				Sheet sht = wb.getSheet(sSheet);
 				// logger.info("----------Sheet " + sSheet);
-				int lastRowNum = sht.getLastRowNum()-colNum;
+				int lastRowNum = sht.getLastRowNum();
+				System.out.println(lastRowNum);
+				
+				Row rowNum = sht.getRow(lastRowNum);
+				Cell cell = rowNum.getCell(columnNumber);
+				if (cell == null) {
+					cell = rowNum.createCell(columnNumber);
+					cell.setCellValue(value);
+					System.out.println("The Request is succusesfully added "+value);
+				} else {
+						cell.setCellValue(value);
+	       				}
+				FileOutputStream fileOut = new FileOutputStream(filePath);
+				wb.write(fileOut);
+				fileOut.flush();
+				fileOut.close();
+			} catch (Exception e) {
+				throw (e);
+			}
+}
+		public static void setServerCellData(String filePath, String sSheet,String columnName, String value,int colNum,int positionUrl)
+				throws Exception {
+			int columnNumber = colNum;
+			try {
+				FileInputStream fis = new FileInputStream(filePath);
+				Workbook wb = (Workbook) WorkbookFactory.create(fis);
+				Sheet sht = wb.getSheet(sSheet);
+				// logger.info("----------Sheet " + sSheet);
+				int lastRowNum = sht.getLastRowNum()-positionUrl;
 				System.out.println(lastRowNum);
 				
 				Row rowNum = sht.getRow(lastRowNum);
@@ -427,13 +490,13 @@ public class GenericLib extends CustomListener{
 }
 		public static void setLastCellDataDomain(String filePath, String sSheet,String columnName, String value,int colNum)
 				throws Exception {
-			int columnNumber = getColumnIndex(filePath, sSheet, columnName,colNum);
+			int columnNumber = colNum;
 			try {
 				FileInputStream fis = new FileInputStream(filePath);
 				Workbook wb = (Workbook) WorkbookFactory.create(fis);
 				Sheet sht = wb.getSheet(sSheet);
 				// logger.info("----------Sheet " + sSheet);
-				int lastRowNum = sht.getLastRowNum()-colNum;
+				int lastRowNum = sht.getLastRowNum();
 				System.out.println(lastRowNum);
 				
 				Row rowNum = sht.getRow(lastRowNum);
@@ -532,6 +595,18 @@ public class GenericLib extends CustomListener{
         }
       
     }
+	/*
+	 * 
+	 * 
+	 * 
+	 */
+	
+	public static void refresh(String url) throws Exception {
+		
+		setLastCellDataUrl(sCacheDataFilePath, "Sheet1", "Url", url, 0);
+		setLastCellDataCatagory(sCacheDataFilePath, "Sheet1", "Category","13",1);
+		setLastCellDataDomain(sCacheDataFilePath,"Sheet1","DomainFlag","M",2);
+	}
 	
 }
 

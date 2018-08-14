@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite hostname="dashree-PC" name="com.tests.client.TestAutomation_01" tests="1" failures="0" timestamp="14 Aug 2018 05:37:31 GMT" time="6.206" errors="0">
-  <testcase name="checkForDomain" time="6.181" classname="com.tests.client.TestAutomation_01"/>
+<testsuite hostname="dashree-PC" name="com.tests.server.TestAutomation_01" tests="1" failures="0" timestamp="14 Aug 2018 07:31:10 GMT" time="9.045" errors="0">
+  <testcase name="updateCategoryRecived" time="7.879" classname="com.tests.server.TestAutomation_01"/>
 </testsuite>
