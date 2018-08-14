@@ -17,8 +17,11 @@ public class TestAutomation_01 extends CustomListener {
 		int url = GenericLib.getColumnIndex(GenericLib.sInjectorDataFilePath,GenericLib.sInjectorSheetName,"URL");
 		System.out.println(sDataClient[url]);
 		GenericLib.setLastCellDataUrl(GenericLib.sCacheDataFilePath,"Sheet1","Url",sDataClient[url],0);
-		GenericLib.setLastCellDataCatagory(GenericLib.sCacheDataFilePath,"Sheet1","Category","12",1);
-		GenericLib.setLastCellDataDomain(GenericLib.sCacheDataFilePath,"Sheet1","DomainFlag","A",2);
+/*		GenericLib.setLastCellDataCatagory(GenericLib.sCacheDataFilePath,"Sheet1","Category","12",1);
+		GenericLib.setLastCellDataDomain(GenericLib.sCacheDataFilePath,"Sheet1","DomainFlag","A",2);*/
+	/*	Thread.sleep(2500);
+		GenericLib.setCellData(GenericLib.sCacheDataFilePath,"Sheet1",1,"12");
+		GenericLib.setCellData(GenericLib.sCacheDataFilePath,"Sheet1",2,"A");*/
 		Thread.sleep(5000);
 		GenericLib.validationClientCache(sDataClient[url],0);
 	}

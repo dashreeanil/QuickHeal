@@ -1,47 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="1" total="1" passed="0">
+<testng-results skipped="0" failed="0" total="1" passed="1">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="1104" started-at="2018-08-13T18:46:04Z" finished-at="2018-08-13T18:46:05Z">
+  <suite name="Default suite" duration-ms="6206" started-at="2018-08-14T11:07:24Z" finished-at="2018-08-14T11:07:30Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="1104" started-at="2018-08-13T18:46:04Z" finished-at="2018-08-13T18:46:05Z">
+    <test name="Default test" duration-ms="6206" started-at="2018-08-14T11:07:24Z" finished-at="2018-08-14T11:07:30Z">
       <class name="com.tests.client.TestAutomation_01">
-        <test-method status="FAIL" signature="checkForDomain()" name="checkForDomain" duration-ms="1085" started-at="2018-08-13T18:46:04Z" description="To check if Domain/URL is present" finished-at="2018-08-13T18:46:05Z">
-          <exception class="java.lang.NullPointerException">
-            <full-stacktrace>
-              <![CDATA[java.lang.NullPointerException
-	at com.Lib.GenericLib.getColumnIndex(GenericLib.java:154)
-	at com.Lib.GenericLib.setLastCellDataCatagory(GenericLib.java:396)
-	at com.tests.client.TestAutomation_01.checkForDomain(TestAutomation_01.java:20)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:80)
-	at org.testng.internal.Invoker.invokeMethod(Invoker.java:673)
-	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:842)
-	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1166)
-	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125)
-	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:109)
-	at org.testng.TestRunner.runWorkers(TestRunner.java:1178)
-	at org.testng.TestRunner.privateRun(TestRunner.java:757)
-	at org.testng.TestRunner.run(TestRunner.java:608)
-	at org.testng.SuiteRunner.runTest(SuiteRunner.java:334)
-	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:329)
-	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:291)
-	at org.testng.SuiteRunner.run(SuiteRunner.java:240)
-	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
-	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
-	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1158)
-	at org.testng.TestNG.runSuitesLocally(TestNG.java:1083)
-	at org.testng.TestNG.run(TestNG.java:999)
-	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:114)
-	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
-	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
-]]>
-            </full-stacktrace>
-          </exception>
+        <test-method status="PASS" signature="checkForDomain()" name="checkForDomain" duration-ms="6181" started-at="2018-08-14T11:07:24Z" description="To check if Domain/URL is present" finished-at="2018-08-14T11:07:30Z">
         </test-method>
       </class>
     </test>

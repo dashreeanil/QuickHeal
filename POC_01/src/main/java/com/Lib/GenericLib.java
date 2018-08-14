@@ -497,7 +497,7 @@ public class GenericLib extends CustomListener{
 	        return columndata;
 	    }
 	
-	public boolean setCellData(String path,String sheetName, int colNumber, int rowNum, String value)
+	public static void setCellData(String path,String sheetName, int colNumber, String value)
     {
 		FileInputStream fis = null;
 	    FileOutputStream fos = null;
@@ -506,19 +506,21 @@ public class GenericLib extends CustomListener{
 	    XSSFRow row = null;
 	    XSSFCell cell = null;
 	    String xlFilePath;
+	    int rowNum;
         try
         {
             sheet = workbook.getSheet(sheetName);
+            rowNum = sheet.getLastRowNum()+1;
             row = sheet.getRow(rowNum);
             if(row==null)
                 row = sheet.createRow(rowNum);
- 
-            cell = row.getCell(colNumber);
+            for(int i=0;i<2;i++) {
+            cell = row.getCell(colNumber+i);
             if(cell == null)
                 cell = row.createCell(colNumber);
  
             cell.setCellValue(value);
- 
+            }
             fos = new FileOutputStream(path);
             workbook.write(fos);
             fos.close();
@@ -526,10 +528,11 @@ public class GenericLib extends CustomListener{
         catch (Exception ex)
         {
             ex.printStackTrace();
-            return  false;
+           
         }
-        return true;
+      
     }
+	
 }
 
 
