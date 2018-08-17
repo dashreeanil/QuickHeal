@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite hostname="dashree-PC" name="com.urlcat.supporter.Test_Automation_Supporter" tests="1" failures="0" timestamp="16 Aug 2018 12:39:05 GMT" time="2.92" errors="0">
+  <testcase name="updateUrlCategory" time="2.903" classname="com.urlcat.supporter.Test_Automation_Supporter"/>
+</testsuite>

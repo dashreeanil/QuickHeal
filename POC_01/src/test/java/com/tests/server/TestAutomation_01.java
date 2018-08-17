@@ -1,5 +1,7 @@
 package com.tests.server;
 
+import java.util.Random;
+
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -10,8 +12,11 @@ public class TestAutomation_01 extends CustomListener{
 	@BeforeMethod
 	public void updateServerCategory() throws Exception
 	{
-		GenericLib.setServerCellData(GenericLib.sServerDataFilePath, "Social", "DomainFlag", "M", 4, 2);
-		GenericLib.setServerCellData(GenericLib.sServerDataFilePath, "Social", "Category", "13", 4, 2);
+		Random rand = new Random();
+		int  n = rand.nextInt(35) + 1;
+		int urlPosition = 2;
+		GenericLib.setServerCellData(GenericLib.sServerDataFilePath, "Social", "DomainFlag", "M", n, urlPosition);
+		GenericLib.setServerCellData(GenericLib.sServerDataFilePath, "Social", "Category", "13", n, urlPosition);
 		
 	}
 	
